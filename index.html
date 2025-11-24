@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>A Little Page From My Heart</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background: radial-gradient(circle at top, #ffd6e7 0, #ffe9c7 35%, #ffe4f2 70%, #fdf2ff 100%);
+            color: #1f2933;
+            display: flex;
+            justify-content: center;
+            padding: 16px;
+        }
+
+        .app {
+            max-width: 900px;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.92);
+            border-radius: 24px;
+            border: 1px solid rgba(248, 113, 113, 0.15);
+            box-shadow: 0 22px 70px rgba(248, 113, 113, 0.2);
+            padding: 18px 16px 22px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        @media (min-width: 768px) {
+            .app {
+                padding: 26px 28px 26px;
+                border-radius: 26px;
+            }
+        }
+
+        .bg-stars {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            opacity: 0.25;
+            background-image:
+                radial-gradient(circle at 10% 15%, #ffe4f1 0, transparent 55%),
+                radial-gradient(circle at 85% 10%, #ffeecb 0, transparent 50%),
+                radial-gradient(circle at 12% 90%, #e0f2fe 0, transparent 55%),
+                radial-gradient(circle at 88% 85%, #fce7f3 0, transparent 60%);
+            z-index: 0;
+        }
+
+        .content {
+            position: relative;
+            z-index: 1;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 18px;
+        }
+
+        .window-bar {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 12px;
+            border-radius: 999px;
+            background: rgba(255, 247, 250, 0.95);
+            border: 1px solid rgba(252, 165, 165, 0.4);
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.18em;
+            color: #fb7185;
+            margin-bottom: 10px;
+        }
+
+        .dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 999px;
+            background: #fecaca;
+        }
+
+        .dot:nth-child(2) {
+            background: #fde68a;
+        }
+
+        .dot:nth-child(3) {
+            background: #bbf7d0;
+        }
+
+        .title {
+            font-size: clamp(22px, 5vw, 26px);
+            font-weight: 800;
+            color: #111827;
+            margin-bottom: 4px;
+        }
+
+        .subtitle {
+            font-size: 13px;
+            color: #6b7280;
+        }
+
+        /* Screens */
+        .screen {
+            display: none;
+            animation: fadeIn 0.4s ease-out;
+        }
+
+        .screen.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(8px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .card {
+            margin-top: 18px;
+            border-radius: 22px;
+            background: #fff7f9;
+            border: 1px solid rgba(254, 202, 202, 0.7);
+            padding: 18px 16px 18px;
+            box-shadow: 0 18px 40px rgba(248, 113, 113, 0.15);
+        }
+
+        @media (min-width: 768px) {
+            .card {
+                padding: 22px 22px 22px;
+            }
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+
+        .card-title {
+            font-size: 19px;
+            font-weight: 700;
+            color: #111827;
+        }
+
+        .card-sub {
+            font-size: 13px;
+            color: #6b7280;
+            margin-bottom: 12px;
+        }
+
+        .big-text {
+            font-size: 24px;
+            font-weight: 800;
+            color: #111827;
+            margin-bottom: 8px;
+        }
+
+        .big-text span {
+            color: #ec4899;
+        }
+
+        .para {
+            font-size: 14px;
+            line-height: 1.7;
+            color: #374151;
+            margin-bottom: 10px;
+            white-space: pre-line;
+        }
+
+        .center {
+            text-align: center;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            padding: 10px 22px;
+            border-radius: 999px;
+            border: none;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.12s ease-out, box-shadow 0.12s ease-out, filter 0.12s ease-out;
+            white-space: nowrap;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #fb7185, #ec4899);
+            color: #f9fafb;
+            box-shadow: 0 16px 40px rgba(236, 72, 153, 0.45);
+        }
+
+        .btn-secondary {
+            background: #a7f3d0;
+            color: #065f46;
+            box-shadow: 0 10px 26px rgba(16, 185, 129, 0.35);
+        }
+
+        .btn:hover {
+            transform: translateY(-1px);
+            filter: brightness(1.03);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+            box-shadow: none;
+        }
+
+        .emoji {
+            font-size: 18px;
+        }
+
+        .footer-note {
+            margin-top: 18px;
+            text-align: center;
+            font-size: 12px;
+            color: #9ca3af;
+        }
+
+        /* Envelope */
+        .envelope-wrap {
+            margin: 16px auto 12px;
+            max-width: 360px;
+            height: 210px;
+            position: relative;
+        }
+
+        .envelope {
+            position: absolute;
+            inset: 0;
+            border-radius: 18px;
+            background: linear-gradient(to bottom, #ffe4f1, #fecaca);
+            box-shadow: 0 18px 40px rgba(248, 113, 113, 0.35);
+            overflow: hidden;
+        }
+
+        .envelope-flap {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to bottom, #fecaca, #fed7e2);
+            clip-path: polygon(0 0, 100% 0, 50% 65%);
+            transform-origin: top;
+            transition: transform 0.5s ease-out;
+        }
+
+        .envelope.open .envelope-flap {
+            transform: rotateX(180deg);
+        }
+
+        .envelope-body {
+            position: absolute;
+            inset: 45% 0 0 0;
+            background: #fee2e2;
+            clip-path: polygon(0 0, 50% 55%, 100% 0, 100% 100%, 0 100%);
+        }
+
+        .seal {
+            position: absolute;
+            top: 40%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 54px;
+            height: 54px;
+            border-radius: 999px;
+            background: #ec4899;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fef2f2;
+            box-shadow: 0 0 0 5px #fecaca;
+            font-size: 22px;
+        }
+
+        .label {
+            font-size: 13px;
+            color: #6b7280;
+            margin-top: 12px;
+        }
+
+        /* Letter box */
+        .letter-box {
+            margin-top: 12px;
+            background: #fffdf7;
+            border-radius: 18px;
+            border: 1px solid rgba(252, 211, 77, 0.6);
+            padding: 16px 15px 16px;
+            box-shadow: 0 16px 40px rgba(250, 204, 21, 0.25);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .letter-heading {
+            font-size: 14px;
+            font-weight: 700;
+            color: #f97316;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .letter-body {
+            font-size: 14px;
+            line-height: 1.8;
+            color: #374151;
+            white-space: pre-line;
+        }
+
+        .signature {
+            margin-top: 14px;
+            font-size: 14px;
+            color: #ec4899;
+            font-weight: 600;
+        }
+
+        .stamp {
+            position: absolute;
+            right: 12px;
+            bottom: 10px;
+            font-size: 20px;
+            opacity: 0.5;
+        }
+
+        /* Appreciation section */
+        .tagline {
+            font-size: 13px;
+            color: #6b7280;
+            margin-bottom: 8px;
+        }
+
+        .appreciation-card {
+            margin-top: 10px;
+            border-radius: 18px;
+            background: #fdf2ff;
+            border: 1px solid rgba(216, 180, 254, 0.7);
+            padding: 14px 14px 14px;
+            box-shadow: 0 16px 30px rgba(192, 132, 252, 0.3);
+        }
+
+        .heart-row {
+            display: flex;
+            justify-content: center;
+            margin-top: 8px;
+            gap: 4px;
+            font-size: 16px;
+            color: #fb7185;
+        }
+
+        .chips {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-top: 10px;
+        }
+
+        .chip {
+            font-size: 11px;
+            padding: 5px 9px;
+            border-radius: 999px;
+            background: #fee2f2;
+            border: 1px solid #fb7185;
+            color: #9f1239;
+        }
+
+        /* Final screen */
+        .final-icon {
+            width: 64px;
+            height: 64px;
+            border-radius: 999px;
+            background: radial-gradient(circle at 30% 20%, #fb7185, #f97316);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            margin: 0 auto 10px;
+            color: #fefce8;
+            box-shadow: 0 18px 40px rgba(248, 113, 113, 0.45);
+        }
+
+        .final-title {
+            font-size: 20px;
+            font-weight: 800;
+            color: #111827;
+            text-align: center;
+            margin-bottom: 4px;
+        }
+
+        .final-sub {
+            font-size: 13px;
+            color: #6b7280;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .date-line {
+            font-size: 13px;
+            color: #6b7280;
+            text-align: center;
+            margin-top: 8px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="app">
+        <div class="bg-stars"></div>
+
+        <div class="content">
+            <header>
+                <div class="window-bar">
+                    <span class="dot"></span><span class="dot"></span><span class="dot"></span>
+                    <span>A Note For You</span>
+                </div>
+                <h1 class="title">A Tiny World I Made Just For You 💌</h1>
+                <p class="subtitle">Scroll / tap through slowly, this whole page is only for you.</p>
+            </header>
+
+            <!-- SCREEN 1: INTRO -->
+            <section class="screen active" id="screen-1">
+                <div class="card center">
+                    <div class="big-text">
+                        Hey <span>Princess</span> 💕
+                    </div>
+                    <p class="para">
+                        I wanted to do something a little different this time – not just a normal message.
+                        So I made this tiny website, only for you, to keep my apology and feelings in one place.
+                    </p>
+                    <p class="para">
+                        Tap the button below when you’re ready to open my heart, slowly and without any pressure.
+                    </p>
+                    <button class="btn btn-primary" data-next="2">
+                        <span class="emoji">✨</span>
+                        <span>Open My Heart</span>
+                    </button>
+
+                    <p class="footer-note">Made with love, mistakes, and hope for another chance 💗</p>
+                </div>
+            </section>
+
+            <!-- SCREEN 2: ENVELOPE -->
+            <section class="screen" id="screen-2">
+                <div class="card center">
+                    <div class="card-title">A Love Letter (and an Apology) 💌</div>
+                    <div class="card-sub">From my heart to yours</div>
+
+                    <div class="envelope-wrap">
+                        <div class="envelope" id="envelope">
+                            <div class="envelope-flap"></div>
+                            <div class="envelope-body"></div>
+                            <div class="seal">💝</div>
+                        </div>
+                    </div>
+
+                    <p class="label">Tap below to open the envelope.</p>
+                    <button class="btn btn-primary" id="open-envelope-btn" data-next="3">
+                        <span>Special Delivery</span>
+                        <span class="emoji">📩</span>
+                    </button>
+
+                    <p class="footer-note">Thank you for even reaching this part. It already means a lot to me.</p>
+                </div>
+            </section>
+
+            <!-- SCREEN 3: MAIN LETTER / APOLOGY -->
+            <section class="screen" id="screen-3">
+                <div class="card">
+                    <div class="card-header">
+                        <div>
+                            <div class="card-title">My Honest Letter To You 💖</div>
+                            <div class="card-sub">I’m sorry, and I really mean it this time.</div>
+                        </div>
+                    </div>
+
+                    <div class="letter-box">
+                        <div class="letter-heading">
+                            <span class="emoji">🌸</span>
+                            <span>My princess Bebo Aditi,</span>
+                        </div>
+                        <div class="letter-body">
+                            Sometimes I don't know how to say things in the right way, but I still want to try honestly,
+                            just once more, from my heart to you.
+
+                            Sorry I can't appreciate u well enough but 🫠maybe next tym i appreciate well after 1 week I
+                            send something which idk I have to send or not but I really miss u and sorry u feel that
+                            worse , u didn't know I always in guilt what I lost and I only hurt a sweet girl who just
+                            want love from me I failed as ur partner 💔 hope u find better than me 🫠and don't think
+                            that I hate u infact I hate myself what I do for u is nothing now 🕊in future u will get
+                            good partner and maybe I send more messages like this if u like it and again sorry ik this
+                            can't change but hope u will know I regret all the things I do 🫠, So I will send this
+                            letter with a beautiful way 😿hope u like it and luv u always , and waiting for u 🫠never
+                            making other girlfriend and never married in my life until it's u and if u thought I am
+                            happy but woh baat nhi hai I am always sed when I see myself lonely 😭🫠 and always miss my
+                            comfort zone who motivate me to play games , gone my stress which give by family🫠
+                            LYSM BBE 💋
+
+                            Thank you for even reading this. I know this doesn’t fix the past, but I hope it at least
+                            shows how much I really regret hurting you.
+                        </div>
+
+                        <div class="signature">
+                            With all my love,<br />
+                            Paro 💕
+                        </div>
+
+                        <div class="stamp">💗</div>
+                    </div>
+
+                    <div class="center" style="margin-top: 14px;">
+                        <button class="btn btn-primary" data-next="4">
+                            <span>Next</span>
+                            <span class="emoji">➡</span>
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SCREEN 4: APPRECIATION FOR HER STORY -->
+            <section class="screen" id="screen-4">
+                <div class="card">
+                    <div class="card-title center">A Little Appreciation For Your Story ✨</div>
+                    <p class="tagline center">
+                        This part is only to appreciate you – not to convince, not to argue, just to admire.
+                    </p>
+
+                    <div class="appreciation-card">
+                        <div class="para">
+                            When I see your stories, I realise again how special you are. Your smile, your vibe, your
+                            strength – it all hits me and I think, “how did I ever hurt this girl who only wanted love?”
+
+                            Sorry I can't appreciate u well enough but 🫠maybe next tym i appreciate well after 1 week I
+                            send something which idk I have to send or not but I really miss u and sorry u feel that
+                            worse , u didn't know I always in guilt what I lost and I only hurt a sweet girl who just
+                            want love from me I failed as ur partner 💔 hope u find better than me 🫠and don't think
+                            that I hate u infact I hate myself what I do for u is nothing now 🕊in future u will get
+                            good partner and maybe I send more messages like this if u like it and again sorry ik this
+                            can't change but hope u will know I regret all the things I do 🫠, So I will send this
+                            letter with a beautiful way 😿hope u like it and luv u always , and waiting for u 🫠never
+                            making other girlfriend and never married in my life until it's u and if u thought I am
+                            happy but woh baat nhi hai I am always sed when I see myself lonely 😭🫠 and always miss my
+                            comfort zone who motivate me to play games , gone my stress which give by family🫠
+                            LYSM BBE 💋
+
+                            I’m genuinely happy seeing you glowing and moving forward, even if I’m not next to you. I’m
+                            proud of the way you handle life, even after everything.
+
+                            If you ever felt unseen by me before, I want you to know now: I see you, I respect you, and
+                            I’m really proud of the person you are becoming. 🕊💗
+                        </div>
+
+                        <div class="chips">
+                            <span class="chip">You looked really pretty there 💖</span>
+                            <span class="chip">Your vibe is getting stronger 🌟</span>
+                            <span class="chip">Proud of your growth 🫶</span>
+                        </div>
+
+                        <div class="heart-row">
+                            <span>💗</span><span>💗</span><span>💗</span><span>💗</span><span>💗</span>
+                        </div>
+                    </div>
+
+                    <div class="center" style="margin-top: 16px;">
+                        <button class="btn btn-primary" data-next="5">
+                            <span>Final Message</span>
+                            <span class="emoji">💌</span>
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SCREEN 5: FINAL MESSAGE -->
+            <section class="screen" id="screen-5">
+                <div class="card center">
+                    <div class="final-icon">💝</div>
+                    <div class="final-title">Letter Sealed with Love</div>
+                    <div class="final-sub">No matter what you decide, my respect for you stays.</div>
+
+                    <div class="heart-row" style="margin-bottom: 8px;">
+                        <span>🤍</span><span>🤍</span><span>🤍</span><span>🤍</span><span>🤍</span>
+                    </div>
+
+                    <p class="para">
+                        Thank you for reading this far. Even if we never go back to what we were,
+                        I’ll always be grateful for your part in my life and for the lessons you unknowingly taught me.
+                    </p>
+
+                    <p class="para">
+                        If one day you ever feel like talking again – even just as friends – I’ll be here,
+                        calmer, softer, and more mature than before. If not, I’ll still pray for your peace,
+                        your happiness, and your success in everything you do.
+                    </p>
+
+                    <p class="para">
+                        Whatever future you choose, I hope it’s kind to your heart. You deserve that, always. 💗
+                    </p>
+
+                    <p class="date-line">
+                        Always yours, Paro<br />
+                        <span id="today-date"></span>
+                    </p>
+
+                    <div style="margin-top: 14px; display:flex; flex-direction:column; gap:8px; align-items:center;">
+                        <button class="btn btn-primary" data-next="1">
+                            <span>Experience Again ✨</span>
+                        </button>
+                    </div>
+
+                    <p class="footer-note">
+                        This page isn’t asking for an answer.
+                        It just wanted to tell you what my heart couldn’t say properly in chats.
+                    </p>
+                </div>
+            </section>
+
+            <p class="footer-note">© <span id="year"></span> A tiny apology universe.</p>
+        </div>
+    </div>
+
+    <script>
+        // Simple screen navigation
+        const screens = document.querySelectorAll(".screen");
+        const buttons = document.querySelectorAll("[data-next]");
+
+        function showScreen(id) {
+            screens.forEach(s => s.classList.remove("active"));
+            const el = document.getElementById('screen-' + id);
+            if (el) el.classList.add('active');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        buttons.forEach(btn => {
+            btn.addEventListener("click", () => {
+                const next = btn.getAttribute("data-next");
+                if (next === "3") {
+                    const env = document.getElementById("envelope");
+                    env.classList.add("open");
+                    setTimeout(() => showScreen(next), 450);
+                } else {
+                    showScreen(next);
+                }
+            });
+        });
+
+        // Year + date
+        document.getElementById("year").textContent = new Date().getFullYear();
+        document.getElementById("today-date").textContent = new Date().toLocaleDateString(
+            "en-IN",
+            { weekday: "long", year: "numeric", month: "long", day: "numeric" }
+        );
+
+        // Open envelope animation when button pressed
+        const openBtn = document.getElementById("open-envelope-btn");
+        openBtn.addEventListener("click", () => {
+            const env = document.getElementById("envelope");
+            env.classList.add("open");
+        });
+    </script>
+</body>
+
+</html>
